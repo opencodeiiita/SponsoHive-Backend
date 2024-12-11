@@ -61,4 +61,20 @@ Ensure the following tools are installed:
    ```bash
    git clone https://github.com/your-username/sponsohive-backend.git
    cd sponsohive-backend
-1. **Clone the Repository**:
+2. **Install Dependencies:**:
+ ```bash
+   npm install
+3. **Set Up Environment Variables: Create a .env file in the root directory and configure the following:**:
+ ```bash
+PORT=5000
+DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/sponsohive
+JWT_SECRET=your_jwt_secret
+EMAIL_API_KEY=your_email_service_api_key
+4. **Run the Application:**:
+ ```bash
+npm run dev
+
+---
+
+
+The backend will be available at http://localhost:5000.
