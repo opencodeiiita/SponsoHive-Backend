@@ -70,6 +70,7 @@ PORT=5000
 DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/sponsohive
 JWT_SECRET=your_jwt_secret
 EMAIL_API_KEY=your_email_service_api_key
+
 4. **Run the Application:**:
  ```bash
 npm run dev
@@ -77,4 +78,4 @@ npm run dev
 ---
 
 
-The backend will be available at http://localhost:5000.
+##The backend will be available at http://localhost:5000.
