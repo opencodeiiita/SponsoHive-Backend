@@ -66,14 +66,14 @@ Ensure the following tools are installed:
    npm install
 3. **Set Up Environment Variables: Create a .env file in the root directory and configure the following:**:
    ```bash
-PORT=5000
-DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/sponsohive
-JWT_SECRET=your_jwt_secret
-EMAIL_API_KEY=your_email_service_api_key
+   PORT=5000
+   DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/sponsohive
+   JWT_SECRET=your_jwt_secret
+   EMAIL_API_KEY=your_email_service_api_key
 
 4. **Run the Application:**:
- ```bash
-npm run dev
+   ```bash
+   npm run dev
 
 ---
 
