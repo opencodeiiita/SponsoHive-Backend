@@ -1,9 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const router = require("./routes/emailListRoutes");
 //const connectDB = require("./config/db");
 
 // Load environment variables
-dotenv.config();
+dotenv.config()
 
 // Connect to MongoDB
 //connectDB();
@@ -18,6 +19,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.get("/api/email-lists", router);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
