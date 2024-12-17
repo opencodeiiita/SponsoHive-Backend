@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 
+app.use("/api/email-lists", router);
 app.use("/api/email-lists", emailListRoute);
 
 // Start Server
