@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 
-app.get("/api/email-lists", router);
+app.use("/api/email-lists", router);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

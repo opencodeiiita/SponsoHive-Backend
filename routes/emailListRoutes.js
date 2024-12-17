@@ -1,5 +1,5 @@
 const express = require("express");
-const { updateEmailListTags, getEmailListTags } = require("../controllers/emailListController");
+const { updateEmailListTags, getEmailListTags, getPaginatedEmailLists } = require("../controllers/emailListController");
 
 const router = express.Router();
 
@@ -9,5 +9,8 @@ router.patch("/:id/tags", updateEmailListTags);
 
 // to get tags of an email list send a get request on route /api/email-lists/:id a array of tags will be returned in response
 router.get("/:id", getEmailListTags);
+
+// Route to get paginated email lists
+router.get("/", getPaginatedEmailLists);
 
 module.exports = router;

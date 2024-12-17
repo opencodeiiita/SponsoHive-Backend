@@ -47,8 +47,45 @@ const EmailList = require("../models/User");
     }
 }
 
+// to get paginated email lists, on route /api/email-lists?page=1&limit=50
+const getPaginatedEmailLists = async (req, res) => {
+    try {
+        console.log('GET /api/email-lists request received');  
 
+      // Extract page and limit query parameters, with defaults
+      const page = parseInt(req.query.page) || 1; // Default page = 1
+      const limit = parseInt(req.query.limit) || 10; // Default limit = 10
+  
+      if (page < 1 || limit < 1) {
+        return res.status(400).json({ message: "Page and limit must be positive integers." });
+      }
+  
+      const skip = (page - 1) * limit;
+
+      const [data, totalItems] = await Promise.all([
+        EmailList.find().skip(skip).limit(limit),
+        EmailList.countDocuments() 
+      ]);
+  
+      const totalPages = Math.ceil(totalItems / limit);
+
+      res.status(200).json({
+        success: true,
+        data,
+        meta: {
+          currentPage: page,
+          totalPages,
+          totalItems,
+          limit
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching paginated email lists:", error);
+      res.status(500).json({ success: false, message: "Server Error" });
+    }
+  };
 module.exports = {
     updateEmailListTags,
-    getEmailListTags
+    getEmailListTags,
+    getPaginatedEmailLists
 }
