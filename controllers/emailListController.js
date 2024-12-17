@@ -1,4 +1,4 @@
-const EmailList = require("../models/User");
+const EmailList = require("../models/EmailList");
 
 
 // to update tags of an email list send a patch request on route /api/email-lists/:id/tags with an array of tags

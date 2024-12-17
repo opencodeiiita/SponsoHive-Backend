@@ -1,22 +1,13 @@
-const mongoose = require('mongoose');
 const User = require('./models/User');
 const EmailList = require('./models/EmailList');
 const Contact = require('./models/Contact');
 const Campaign = require('./models/Campaign');
 const Template = require('./models/Template');
+const { connectDB } = require('../config/db');
 
 const seedData = async () => {
-  await mongoose.connect('mongodb://localhost:27017/EmailMarketingDB', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+  await connectDB();
 
-  // Create Users
-  const users = await User.insertMany([
-    { name: 'Arjun', email: 'arjun@example.com', hashedPassword: 'hashedpassword1', role: 'Admin' },
-    { name: 'Maharaja', email: 'maharaja@example.com', hashedPassword: 'hashedpassword2', role: 'Team Member' },
-    { name: 'TeamMember1', email: 'teammember1@example.com', hashedPassword: 'hashedpassword3', role: 'Team Member' }
-  ]);
 
   // Create Email Lists
   const emailLists = await EmailList.insertMany([
@@ -31,11 +22,6 @@ const seedData = async () => {
     { email: 'alice.jones@example.com', name: 'Alice Jones', emailListId: emailLists[1]._id }
   ]);
 
-  // Create Templates
-  const templates = await Template.insertMany([
-    { title: 'Welcome Email', content: 'Hello {name}, welcome to our service!', placeholders: '{name}' },
-    { title: 'Thank You Email', content: 'Thank you for subscribing, {name}.', placeholders: '{name}' }
-  ]);
 
   // Create Campaigns
   const campaigns = await Campaign.insertMany([
