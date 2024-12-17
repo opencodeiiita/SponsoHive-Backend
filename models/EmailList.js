@@ -1,23 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
+const emailListSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  tags: { type: [String], default: [] },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+}, { timestamps: true }); 
 
-const EmailListSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    contacts: [
-        {
-        name: String,
-        email: String
-        }
-    ],
-    tags: {
-        type: [String],
-        default: []
-    }
-});
-
-const EmailList = new mongoose.model("EmailList", EmailListSchema);
+const EmailList = mongoose.model('EmailList', emailListSchema);
 
 module.exports = EmailList;
