@@ -78,15 +78,17 @@ const handleCheckDuplicates = async (req, res) => {
     if (error.message === "Duplicate entry found.") {
       return res.status(409).send(error.message);
     }
-    console.error(error);
+     console.error(error);
     return res.status(500).send("Error checking for duplicates.");
-}
+  
+    }
 }
 
 // to get paginated email lists, on route /api/email-lists?page=1&limit=50
 const getPaginatedEmailLists = async (req, res) => {
     try {
         console.log('GET /api/email-lists request received');  
+
       // Extract page and limit query parameters, with defaults
       const page = parseInt(req.query.page) || 1; // Default page = 1
       const limit = parseInt(req.query.limit) || 10; // Default limit = 10
@@ -120,10 +122,9 @@ const getPaginatedEmailLists = async (req, res) => {
     }
   };
 module.exports = {
+    updateEmailListTags,
     getEmailListTags,
     getPaginatedEmailLists,
-
-    updateEmailListTags,
     handleCheckDuplicates,
     isDuplicate,
 };
