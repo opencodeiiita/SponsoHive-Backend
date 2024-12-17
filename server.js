@@ -1,13 +1,15 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const router = require("./routes/emailListRoutes");
-//const connectDB = require("./config/db");
+const { connectDB } = require("./config/db.js");
+const authRoute = require("./routes/authRoutes");
+const templateRoute = require("./routes/email");
 
 // Load environment variables
-dotenv.config()
+dotenv.config();
 
 // Connect to MongoDB
-//connectDB();
+connectDB();
 
 // Initialize Express App
 const app = express();
@@ -19,6 +21,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
+
+app.use("/user", authRoute);
+app.use("/api/template", templateRoute);
 
 app.get("/api/email-lists", router);
 
