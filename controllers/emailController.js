@@ -1,4 +1,5 @@
 const EmailTemplate = require("../models/EmailTemplate");
+const { isDuplicate } = require("./emailListController");
 
 const createEmailTemplate = async (req, res) => {
   try {
@@ -7,6 +8,8 @@ const createEmailTemplate = async (req, res) => {
     if (!userId || !title || !subject || !body) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
+    await isDuplicate(userId, title, subject, body, format);
 
     const newTemplate = new EmailTemplate({
       userId,
@@ -21,6 +24,9 @@ const createEmailTemplate = async (req, res) => {
 
     return res.status(201).json(savedTemplate);
   } catch (error) {
+    if (error.message === "Duplicate entry found.") {
+      return res.status(409).json({ error: error.message });
+    }
     console.error("Error creating email template:", error.message);
     return res.status(500).json({ error: "Server error" });
   }

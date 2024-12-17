@@ -4,6 +4,7 @@ const router = require("./routes/emailListRoutes");
 const { connectDB } = require("./config/db.js");
 const authRoute = require("./routes/authRoutes");
 const templateRoute = require("./routes/email");
+const emailListRoute = require("./routes/emailListRoutes.js");
 
 // Load environment variables
 dotenv.config();
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
 app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 
-app.get("/api/email-lists", router);
+app.use("/api/email-lists", emailListRoute);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

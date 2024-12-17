@@ -1,5 +1,5 @@
 const express = require("express");
-const { updateEmailListTags, getEmailListTags } = require("../controllers/emailListController");
+const { updateEmailListTags, getEmailListTags, handleCheckDuplicates } = require("../controllers/emailListController");
 
 const router = express.Router();
 
@@ -9,5 +9,7 @@ router.patch("/:id/tags", updateEmailListTags);
 
 // to get tags of an email list send a get request on route /api/email-lists/:id a array of tags will be returned in response
 router.get("/:id", getEmailListTags);
+
+router.post("/check-duplicates", handleCheckDuplicates);
 
 module.exports = router;
