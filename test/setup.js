@@ -4,7 +4,13 @@ const { MongoMemoryServer } = require('mongodb-memory-server');
 let mongoServer;
 
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
+  mongoServer = await MongoMemoryServer.create({
+    binary: {
+      version: '5.0.8', // Use the version you downloaded
+      downloadDir: '/path/to/downloaded/mongodb', // Path to the folder where you extracted MongoDB
+    },
+    skipDownload: true, });
+  
   const uri = mongoServer.getUri();
 
   // Avoid multiple connections
