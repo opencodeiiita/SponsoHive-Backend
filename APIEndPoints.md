@@ -241,4 +241,31 @@
   {
     "message": "Compliance settings updated successfully"
   }
-  
+  ```
+
+### 14. **GET email list: Pagination for email lists**
+**GET** `/api/email-lists`
+- **Description**: Fetches a paginated list of email records.
+- **Headers**:
+  - Authorization: `Bearer <token>`
+- **Query Parameters**
+- ```Parameter	       Type	      Default	            Description
+-     page	          Number	      1	          The page number to retrieve.
+-     limit	        Number	      10	        Number of items to fetch per page.
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "data": [
+      { "id": "integer", "email": "string" },
+      { "id": "integer", "email": "string" }
+    ],
+    "meta": {
+      "currentPage": 1,
+      "totalPages": 5,
+      "totalItems": 50,
+      "limit": 10
+    }
+  }
+  ```
