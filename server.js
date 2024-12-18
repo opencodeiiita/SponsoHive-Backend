@@ -1,19 +1,30 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const router = require("./routes/emailListRoutes");
-//const connectDB = require("./config/db");
-
-// Load environment variables
+const dotenv = require("dotenv");//to load environment variables
 dotenv.config()
 
+const express = require("express");
+
+const router = require("./routes/emailListRoutes");
+const userRoute = require("./routes/authRoutes");
+const {connectToMongoDB} = require("./config/db");
+const cookieParser = require('cookie-parser');
+const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
+
+
+// Load environment variables
+
 // Connect to MongoDB
-//connectDB();
+connectToMongoDB('mongodb://127.0.0.1:27017/sponsohive')
+
 
 // Initialize Express App
 const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
+app.use(checkForAuthenticationCookie('token'));
+
+app.use("/",userRoute)
 
 // Basic Route
 app.get("/", (req, res) => {
