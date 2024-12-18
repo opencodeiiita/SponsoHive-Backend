@@ -40,3 +40,28 @@ describe('Email Upload and Validation', () => {
     expect(response.body.invalidEmails).toContain('invalid-email');
   });
 });
+const validateDuplicates = (emailList) => {
+  const uniqueEmails = new Set();
+  return emailList.filter(email => {
+    if (uniqueEmails.has(email)) {
+      return true; // duplicate found
+    } else {
+      uniqueEmails.add(email);
+      return false; // first time
+    }
+  });
+};
+
+describe('Duplicate Detection', () => {
+  it('should detect duplicates', () => {
+    const emails = ['test@example.com', 'duplicate@example.com', 'test@example.com'];
+    const duplicates = validateDuplicates(emails);
+    expect(duplicates).toEqual(['test@example.com']);
+  });
+
+  it('should not detect non-duplicates', () => {
+    const emails = ['test@example.com', 'unique@example.com'];
+    const duplicates = validateDuplicates(emails);
+    expect(duplicates).toEqual([]);
+  });
+});

@@ -1,4 +1,9 @@
-email
-test1@example.com
-invalid-email
-test2@example.com
+
+Email,Category
+user1@gmail.com,Work
+user2@yahoo.com,Personal
+user1@gmail.com,Duplicate
+user3@hotmail.com,Work
+user2@yahoo.com,Duplicate
+user4@@gmail.com,Invalid
+user5@yahoo.com,Personal
