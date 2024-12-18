@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
+const { createHmac, randomBytes } = require('node:crypto') // We called this builtin package to hash
+const {createTokenForUser} = require('../services/auth');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -55,7 +56,7 @@ const UserSchema = new mongoose.Schema({
 //     next();
 //   }
 // });
-userSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
   const user = this // this points to current user
 
   // If the password hasn't been modified, skip hashing
@@ -77,7 +78,7 @@ UserSchema.methods.isPasswordValid = async function (password) {
   }
 };
 
-userSchema.static('matchPasswordAndGenerateToken', async function (email, password) {
+UserSchema.static('matchPasswordAndGenerateToken', async function (email, password) {
   const user = await this.findOne({ email })
   if (!user) throw new Error('User not found')
 
