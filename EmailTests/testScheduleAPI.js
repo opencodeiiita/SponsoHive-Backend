@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const axios = require('axios');
-const Campaign = require('../models/Campaign');
-const EmailList = require('../models/EmailList');
-const User = require('../models/User');
+const Campaign = require('./models/Campaign');
+const EmailList = require('./models/EmailList');
+const User = require('./models/User');
 
 // Replace with your MongoDB URI and API base URL
 const MONGODB_URI = 'PLACE_URL';

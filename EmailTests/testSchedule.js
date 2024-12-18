@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const { scheduleCampaign } = require('../utils/schedulerService');
-const Campaign = require('../models/Campaign');
-const EmailList = require('../models/EmailList');
-const User = require('../models/User');
+const { scheduleCampaign } = require('./utils/schedulerService');
+const Campaign = require('./models/Campaign');
+const EmailList = require('./models/EmailList');
+const User = require('./models/User');
 
 // Replace with your MongoDB URI
 const MONGODB_URI = 'PLACE_URL';

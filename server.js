@@ -4,11 +4,8 @@ const router = require("./routes/emailListRoutes");
 const { connectDB } = require("./config/db.js");
 const authRoute = require("./routes/authRoutes");
 const templateRoute = require("./routes/email");
-<<<<<<< HEAD
 const campaignRoutes = require('./routes/campaignRoutes');
-=======
 const emailListRoute = require("./routes/emailListRoutes.js");
->>>>>>> upstream/main
 
 // Load environment variables
 dotenv.config();
@@ -29,14 +26,8 @@ app.get("/", (req, res) => {
 
 app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
-<<<<<<< HEAD
 app.use('/api/campaigns', campaignRoutes);
 app.get("/api/email-lists", router);
-=======
-
-app.use("/api/email-lists", router);
-app.use("/api/email-lists", emailListRoute);
->>>>>>> upstream/main
 
 // Start Server
 const PORT = process.env.PORT || 5000;

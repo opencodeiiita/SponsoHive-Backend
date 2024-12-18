@@ -1,4 +1,4 @@
-const sendEmail = require('../utils/emailService');
+const sendEmail = require('./utils/emailService');
 
 const testEmail = {
   to: 'RECEIPENT@gmail.com', // Replace with an actual email
