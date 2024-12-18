@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
+const { validateToken } = require("../services/auth");
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 
@@ -31,5 +31,22 @@ const authMiddleware = async (req, res, next) => {
     res.status(401).json({ message: "Invalid or expired token." });
   }
 };
+function checkForAuthenticationCookie(cookieName) {
+  return (req, res, next) => {
+      const tokenCookieValue = req.cookies[cookieName];
 
-module.exports = authMiddleware;
+      if (!tokenCookieValue) {
+          // Return early if the cookie is missing
+          return next();
+      }
+
+      try {
+          const userPayload = validateToken(tokenCookieValue);
+          req.user = userPayload;
+          return next(); // Call next after attaching userPayload to req
+      } catch (error) {
+          return next(); // Call next on error, allowing next middleware to handle the error
+      }
+  };
+}
+module.exports = {checkForAuthenticationCookie,authMiddleware};

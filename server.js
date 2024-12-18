@@ -7,6 +7,8 @@ const templateRoute = require("./routes/email");
 const campaignRoutes = require('./routes/campaignRoutes');
 const emailListRoute = require("./routes/emailListRoutes.js");
 const testRoutes = require('./routes/testRoutes');  // Import the test route for RBAC validation
+const cookieParser = require('cookie-parser');
+const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
 
 // Load environment variables
 dotenv.config();
@@ -19,6 +21,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
+app.use(checkForAuthenticationCookie('token'));
 
 // Basic Route
 app.get("/", (req, res) => {
