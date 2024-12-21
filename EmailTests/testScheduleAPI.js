@@ -4,19 +4,6 @@ const Campaign = require('./models/Campaign');
 const EmailList = require('./models/EmailList');
 const User = require('./models/User');
 
-// Replace with your MongoDB URI and API base URL
-const MONGODB_URI = 'PLACE_URL';
-const API_URL = 'http://localhost:5000/api/campaigns/schedule'; // Adjust port as needed
-
-async function connectToDB() {
-  try {
-    await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    process.exit(1);
-  }
-}
 
 async function setupMockData() {
   try {

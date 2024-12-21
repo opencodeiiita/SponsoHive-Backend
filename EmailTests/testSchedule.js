@@ -4,19 +4,6 @@ const Campaign = require('./models/Campaign');
 const EmailList = require('./models/EmailList');
 const User = require('./models/User');
 
-// Replace with your MongoDB URI
-const MONGODB_URI = 'PLACE_URL';
-
-async function connectToDB() {
-  try {
-    await mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log('Connected to MongoDB');
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    process.exit(1);
-  }
-}
-
 // Mock data setup
 async function setupMockData() {
   try {
@@ -71,7 +58,7 @@ async function testEmailScheduler() {
     console.log('Campaign status after execution:', updatedCampaign.status);
     await mongoose.connection.close();
     console.log('Test complete and database connection closed.');
-  }, 2 * 60 * 1000); // Wait 2 minutes to ensure campaign execution
+  }, 2 * 60 * 1000);
 }
 
 // Run the test
