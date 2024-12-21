@@ -1,4 +1,5 @@
 const multer = require('multer');
+const { EmailList } = require('../models/EmailList');
 
 const storage = multer.memoryStorage();
 const fileFilter = (req, file, cb) => {
@@ -9,5 +10,14 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+const trackEmailResponse = async (emailId) => {
+  const email = await EmailList.findById(emailId);
+
+  if (email) {
+    email.responded = true;  // Mark as responded
+    await email.save();
+  }
+};
+
 const upload = multer({ storage, fileFilter });
-module.exports = upload;
+module.exports = { trackEmailResponse, upload };
