@@ -1,6 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { validateToken } = require("../services/auth");
+
+
+
 const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
 

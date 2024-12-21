@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/authMiddleware');  // Authentication Middleware
+const {authMiddleware} = require('../middleware/authMiddleware');  // Authentication Middleware
 const roleMiddleware = require('../middleware/roleMiddleware');  // Role Middleware
 
 // Test Route for RBAC Validation
