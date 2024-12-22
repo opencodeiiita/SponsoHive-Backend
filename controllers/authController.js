@@ -54,6 +54,8 @@ async function handleUserSignup(req, res) {
     // Generate a unique verification token
     const verificationToken = crypto.randomBytes(32).toString("hex");
 
+   
+
     // Create a new user with the verification token
     await User.create({
       name,

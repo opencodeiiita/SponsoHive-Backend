@@ -134,6 +134,40 @@
   }
   ```
 
+  **POST** `/api/campaigns/preview`
+- **Description**:  Generate a preview of an email campaign by replacing 
+                    placeholders in the template with recipient data..
+- **Headers**:
+  - Authorization: `Bearer <token>`
+- **Request Body**:
+  ```json
+  {
+    "template": "string", // Email template containing placeholders (e.g., "{{firstName}}").
+    "recipientId": "string" // ID of the recipient to use for replacing placeholders.
+  }
+
+  ```
+- **Response**:
+  ```json
+  - Success(200)
+  {
+    "message": "Email preview generated successfully",
+    "preview": "string" // The email preview with placeholders replaced by recipient data.
+  }
+  - Client Error(400)
+  {
+    "message": "Template and recipient ID are required"
+  }
+  - Not Found(404)
+  {
+    "message": "Recipient not found"
+  }
+  - Server Error(500):
+  {
+    "message": "An error occurred while generating the email preview"
+  }
+  ```
+
 ### 8. **Get Campaigns**
 **GET** `/api/campaigns`
 - **Description**: Retrieve all campaigns.
