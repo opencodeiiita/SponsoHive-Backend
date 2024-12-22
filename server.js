@@ -10,7 +10,6 @@ const testRoutes = require('./routes/testRoutes');
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
 const uploadRoutes = require('./routes/upload');
-
 // Load environment variables
 dotenv.config();
 
@@ -41,7 +40,7 @@ app.get("/api/health", async (req, res) => {
 });
 
 // Use routes
-app.use("/user", authRoute);
+// app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
@@ -59,6 +58,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Internal server error" });
 });
+
+// Register the campaign routes
+app.use("/api/campaigns", campaignRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
