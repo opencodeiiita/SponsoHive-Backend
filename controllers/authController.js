@@ -53,7 +53,6 @@ async function handleUserSignup(req, res) {
   try {
     // Generate a unique verification token
     const verificationToken = crypto.randomBytes(32).toString("hex");
-    console.log("Verification URL:", verificationToken);
 
    
 
@@ -67,7 +66,6 @@ async function handleUserSignup(req, res) {
 
     // Send verification email
     const verificationUrl = `${process.env.BASE_URL}/auth/verify-email?token=${verificationToken}`;
-    console.log("Verification URL:", verificationUrl);
     await transporter.sendMail({
       from: process.env.EMAIL,
       to: email,
