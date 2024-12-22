@@ -42,6 +42,7 @@ SponsoHive is a platform designed to streamline the process of seeking sponsorsh
 - **Real-time Features**: Socket.IO
 - **Email Services**: Nodemailer, SendGrid
 - **Deployment**: Docker, Railway
+- **Cloud**: Cloudinary
 
 ---
 
@@ -52,7 +53,7 @@ Ensure the following tools are installed:
 - npm (v9 or higher)
 - MongoDB (local or cloud instance)
 - Docker (optional for containerization)
-
+- Set up cloudinary account
 ---
 
 ## Getting Started
@@ -70,6 +71,9 @@ Ensure the following tools are installed:
    DATABASE_URL=mongodb+srv://<username>:<password>@cluster.mongodb.net/sponsohive
    JWT_SECRET=your_jwt_secret
    EMAIL_API_KEY=your_email_service_api_key
+   CLOUDINARY_CLOUD_NAME=cloud_name
+   CLOUDINARY_API_KEY=cloud_api_key
+   CLOUDINARY_API_SECRET=cloud_api_secret
 
 4. **Run the Application:**:
    ```bash
