@@ -9,6 +9,7 @@ const emailListRoute = require("./routes/emailListRoutes.js");
 const testRoutes = require('./routes/testRoutes');
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
+const trackingRoute = require('./routes/emailTrackingRoute');
 
 // Load environment variables
 dotenv.config();
@@ -45,6 +46,7 @@ app.use("/api/template", templateRoute);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
 app.use('/api/auth/test', testRoutes);  // Logical grouping for RBAC testing
+app.use('/api/analytics', trackingRoute); // Route for email tracking
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {
