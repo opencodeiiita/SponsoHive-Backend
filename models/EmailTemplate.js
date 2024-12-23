@@ -31,6 +31,10 @@ const EmailTemplateSchema = new mongoose.Schema({
       value: { type: String, required: true },
     },
   ],
+  fileUrl: {
+    type: String, // URL of the attached file
+    required: false, // Optional field
+  },
   createdAt: {
     type: Date,
     default: Date.now,

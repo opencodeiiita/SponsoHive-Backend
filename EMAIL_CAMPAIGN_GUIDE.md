@@ -11,6 +11,7 @@ Template Management: Easily design and manage email templates.
 Campaign Scheduling: Schedule one-time or recurring campaigns with precise control.
 Follow-Ups: Automatically send follow-ups based on recipient behavior.
 Analytics: Monitor campaign performance, including open rates, click-through rates, and conversions.
+Add Attachments: Can add attachments in templates, so as to send in mails.
 
 
 #  API Documentation
@@ -28,6 +29,7 @@ Analytics: Monitor campaign performance, including open rates, click-through rat
   "body": "<html>Your custom HTML here</html>"
 }
 ```
+`If file is attached then body must be of type multipart/form-data and the key for attachment is 'file'`
 - **Response**:
 ```json
 {

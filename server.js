@@ -9,6 +9,7 @@ const emailListRoute = require("./routes/emailListRoutes.js");
 const testRoutes = require('./routes/testRoutes');
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
+const uploadRoutes = require('./routes/upload');
 const trackingRoute = require('./routes/emailTrackingRoute');
 
 // Load environment variables
@@ -41,12 +42,14 @@ app.get("/api/health", async (req, res) => {
 });
 
 // Use routes
-app.use("/user", authRoute);
+// app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
 app.use('/api/auth/test', testRoutes);  // Logical grouping for RBAC testing
 app.use('/api/analytics', trackingRoute); // Route for email tracking
+
+app.use('/api/upload', uploadRoutes); //For testing upload middleware
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {
@@ -58,6 +61,9 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Internal server error" });
 });
+
+// Register the campaign routes
+app.use("/api/campaigns", campaignRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

@@ -1,5 +1,6 @@
 const Campaign = require('../models/Campaign');
 const { scheduleCampaign } = require('../utils/schedulerService');
+const Recipient = require("../models/Recipient"); 
 
 /**
  * Schedule a new campaign.
@@ -52,5 +53,31 @@ exports.updateFollowUpSettings = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error updating follow-up settings' });
+  }
+};
+
+exports.previewEmail = async (req, res) => {
+  try {
+    const { template, recipientId } = req.body;
+
+    if (!template || !recipientId) {
+      return res.status(400).json({ message: "Template and recipient ID are required." });
+    }
+    const recipient = await Recipient.findById(recipientId);
+
+    if (!recipient) {
+      return res.status(404).json({ message: "Recipient not found." });
+    }
+
+    // Replace placeholders in the template
+    const placeholderRegex = /\{\{(.*?)\}\}/g; // Matches {{key}}
+    const preview = template.replace(placeholderRegex, (match, key) => {
+      return recipient[key.trim()] || `[${key.trim()} missing]`;
+    });
+
+    res.status(200).json({ preview });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while generating the email preview." });
   }
 };
