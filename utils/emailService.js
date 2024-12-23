@@ -19,16 +19,18 @@ const transporter = nodemailer.createTransport({
  * @param {string} options.to - Recipient's email address.
  * @param {string} options.subject - Subject of the email.
  * @param {string} options.body - Email body content.
+ * @param {Array<Object>} [options.attachments] - Attachments for the email.
  * @returns {Promise<void>}
  */
 
-async function sendEmail({ to, subject, body }) {
+async function sendEmail({ to, subject, body, attachments = [] }) {
   try {
     const mailOptions = {
       from: process.env.EMAIL_USER, // Sender address
       to, // Recipient address
       subject, // Subject line
       text: body, // Plain text body
+      attachments, // Attachments (optional)
     };
 
     const info = await transporter.sendMail(mailOptions);

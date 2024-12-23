@@ -11,6 +11,9 @@ const createEmailTemplate = async (req, res) => {
 
     await isDuplicate(userId, title, subject, body, format);
 
+    // Extract fileUrl from the uploaded file (if present)
+    const fileUrl = req.file ? req.file.path : undefined;
+
     const newTemplate = new EmailTemplate({
       userId,
       title,
@@ -18,6 +21,7 @@ const createEmailTemplate = async (req, res) => {
       body,
       format,
       placeholders,
+      ...(fileUrl && { fileUrl }), // Only include fileUrl if present
     });
 
     const savedTemplate = await newTemplate.save();
