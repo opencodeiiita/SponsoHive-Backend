@@ -10,6 +10,8 @@ const testRoutes = require('./routes/testRoutes');
 const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
 const uploadRoutes = require('./routes/upload');
+const trackingRoute = require('./routes/emailTrackingRoute');
+
 // Load environment variables
 dotenv.config();
 
@@ -45,6 +47,7 @@ app.use("/api/template", templateRoute);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
 app.use('/api/auth/test', testRoutes);  // Logical grouping for RBAC testing
+app.use('/api/analytics', trackingRoute); // Route for email tracking
 
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 
