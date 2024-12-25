@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const emailTrackingSchema = new mongoose.Schema({
-  campaignId: { type: String, required: true },
-  recipientId: { type: String, required: true },
-  trackingurl: { type: String, required: true },
-  timestamp: { type: Date, default: null },
+    campaignId: { type: String, required: true },
+    recipientId: { type: String, required: true },
+    trackingurls: [{ type: String }], 
+    clicks: [{ type: Number, default: 0 }], 
+    timestamp: { type: Date, default: null }
 });
 
 module.exports = mongoose.model('EmailTracking', emailTrackingSchema);
