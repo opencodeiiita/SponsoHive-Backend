@@ -7,7 +7,9 @@ const campaignSchema = new mongoose.Schema({
   follow_up: { type: Number, default: 3 },
   status: { type: String, enum: ['Scheduled', 'Sent', 'Cancelled', 'Failed'], default: 'Scheduled' },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
+  campaignId: { type: String, required: true }, // campaignid for sending mails
+  replyToAddess: { type: String, required: true } // unique address for receiving replies
 });
 
 const Campaign = mongoose.model('Campaign', campaignSchema);

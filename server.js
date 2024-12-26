@@ -11,6 +11,8 @@ const cookieParser = require('cookie-parser');
 const { checkForAuthenticationCookie } = require('./middleware/authMiddleware');
 const uploadRoutes = require('./routes/upload');
 const trackingRoute = require('./routes/emailTrackingRoute');
+const http = require('http');
+const {initializeSocket} = require('./services/socketService');
 const hubspotRoutes = require('./routes/hubspotRoutes');
 
 // Load environment variables
@@ -21,6 +23,10 @@ connectDB();
 
 // Initialize Express App
 const app = express();
+
+// Initialize Socket.io
+const server = http.createServer(app);
+initializeSocket(server);
 
 // Middleware
 app.use(express.json());
@@ -70,7 +76,7 @@ app.use("/api/campaigns", campaignRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
