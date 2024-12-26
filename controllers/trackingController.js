@@ -85,22 +85,26 @@ const handleLogClick = async (req, res) => {
     }
 
     try {
-        
         const emailTracking = await EmailTracking.findOne({ recipientId, campaignId });
 
         if (!emailTracking) {
             return res.status(400).json({ error: 'Invalid tracking data.' });
         }
-
-       
-        const encodedTargetUrl = encodeURIComponent(targetUrl);
-        console.log('Encoded Target URL:', encodedTargetUrl);
+        const decodedTargetUrl = decodeURIComponent(targetUrl);
+        console.log('Decoded Target URL:', decodedTargetUrl);
         console.log('Tracking URLs in DB:', emailTracking.trackingurls);
-        const urlIndex = emailTracking.trackingurls.findIndex(url => url.includes(encodedTargetUrl));
+
+        const urlIndex = emailTracking.trackingurls.findIndex(url => {
+            const urlObj = new URL(url);
+            const params = new URLSearchParams(urlObj.search);
+            const storedTargetUrl = params.get('targetUrl');
+            return decodeURIComponent(storedTargetUrl) === decodedTargetUrl;
+        });
 
         if (urlIndex === -1) {
             return res.status(400).json({ error: 'Target URL not found in the email.' });
         }
+
         emailTracking.clicks[urlIndex] += 1;
         emailTracking.timestamp = new Date(); 
         await emailTracking.save();
@@ -112,6 +116,7 @@ const handleLogClick = async (req, res) => {
         res.status(500).json({ error: 'Failed to log click event.', details: error.message });
     }
 };
+
 
 
 
@@ -171,9 +176,9 @@ const handleGetCTR = async (req, res) => {
 
     try {
         const campaignLinks = await EmailTracking.find({ campaignId });
-
+       //To avoid dividing by zero
         if (campaignLinks.length === 0) {
-            return res.status(404).json({ error: 'No links found for this campaign.' });
+            return res.status(404).json({ error: 'No emails found for this campaign.' });
         }
 
         let totalClicks = 0;
@@ -183,7 +188,8 @@ const handleGetCTR = async (req, res) => {
             totalClicks += email.clicks.reduce((sum, clicks) => sum + clicks, 0);
         });
 
-        const ctr = (totalClicks / totalEmailsSent) * 100;
+        // Avoid division by zero
+        const ctr = totalEmailsSent === 0 ? 0 : (totalClicks / totalEmailsSent) * 100;
         res.status(200).json({ ctr: ctr.toFixed(2) + '%' });
     } catch (error) {
         console.error(error);
