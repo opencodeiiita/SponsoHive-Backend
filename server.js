@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { connectDB } = require("./config/db.js");
 const authRoute = require("./routes/authRoutes");
 const templateRoute = require("./routes/email");
+const CtrRoute=require("./routes/CtrRoutes.js");
 const campaignRoutes = require('./routes/campaignRoutes');
 const emailListRoute = require("./routes/emailListRoutes.js");
 const testRoutes = require('./routes/testRoutes');
@@ -54,6 +55,7 @@ app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
 app.use('/api/auth/test', testRoutes);  // Logical grouping for RBAC testing
 app.use('/api/analytics', trackingRoute); // Route for email tracking
+app.use("/api/ctr",CtrRoute);
 
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 
