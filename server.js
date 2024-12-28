@@ -14,6 +14,7 @@ const uploadRoutes = require('./routes/upload');
 const trackingRoute = require('./routes/emailTrackingRoute');
 const http = require('http');
 const {initializeSocket} = require('./services/socketService');
+const hubspotRoutes = require('./routes/hubspotRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -32,6 +33,7 @@ initializeSocket(server);
 app.use(express.json());
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie('token'));
+app.use(express.urlencoded({ extended: true }));
 
 // Basic Route
 app.get("/", (req, res) => {
@@ -58,6 +60,7 @@ app.use('/api/analytics', trackingRoute); // Route for email tracking
 app.use("/api/ctr",CtrRoute);
 
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
+app.use('/oauth', hubspotRoutes); // For hubspot integration
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {
