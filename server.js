@@ -16,6 +16,7 @@ const http = require('http');
 const {initializeSocket} = require('./services/socketService');
 const hubspotRoutes = require('./routes/hubspotRoutes');
 const unsubscribeRoutes = require('./routes/UnsubsribeRoutes');
+const socialMediaRoutes = require('./routes/socialMediaRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -63,6 +64,7 @@ app.use("/api/unsubscribe", unsubscribeRoutes);
 
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 app.use('/oauth', hubspotRoutes); // For hubspot integration
+app.use("/api/social",socialMediaRoutes);
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {

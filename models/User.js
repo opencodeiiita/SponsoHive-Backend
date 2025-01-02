@@ -41,6 +41,10 @@ const UserSchema = new mongoose.Schema({
   verificationToken: {
     type: String, // Token for email verification
   },
+  socialMediaEnabled:{
+    type: Boolean,
+    default: false
+  }
 });
 
 // UserSchema.pre("save", async function (next) {

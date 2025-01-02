@@ -303,3 +303,166 @@
     }
   }
   ```
+
+  ### 15. **Fetch User Profiles from linkedin and twitter**
+
+
+#### **1. LinkedIn API: Fetch User Profiles by Email**
+
+**Endpoint:**  
+`GET /api/social/linkedin/authorize`
+
+**Description:**  
+Fetches LinkedIn profile data for a user based on their email address and saves it in the database.
+
+**Required Scopes:**  
+To fetch the necessary LinkedIn data, the following OAuth 2.0 scopes are required during the authorization process:
+
+1. **`openid`**:  
+   This scope grants access to the user's LinkedIn ID and basic profile information.
+
+2. **`email`**:  
+   This scope grants access to the user's primary email address.
+
+3. **`profile`**:  
+   This scope grants access to the user's basic profile information, including first name, last name, headline, and profile picture.
+
+**Steps to Use:**  
+1. **Register a LinkedIn Application:**  
+   - Go to [LinkedIn Developer Portal](https://www.linkedin.com/developers/) and create an application.  
+   - Note down your `CLIENT_ID` and `CLIENT_SECRET`.  
+
+2. **Set Up Environment Variables:**  
+   Add the following variables to your `.env` file:  
+   ```plaintext
+   LINKEDIN_CLIENT_ID=your_linkedin_client_id
+   LINKEDIN_CLIENT_SECRET=your_linkedin_client_secret
+   LINKEDIN_REDIRECT_URI=your_redirect_uri
+   ```
+
+3. **Obtain Authorization Code:**  
+   - Send users to this authorization URL to obtain the code:  
+     ```
+     https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={LINKEDIN_CLIENT_ID}&redirect_uri={LINKED_URI}&scope=r_liteprofile%20r_emailaddress
+     ```  
+   - Replace `{LINKEDIN_CLIENT_ID}` and `{LINKEDIN_REDIRECT_URI}` with your application’s details.
+
+4. **Exchange Code for Access Token:**  
+   This is handled by the backend when the `GET` request is sent to `/api/social/linkedin/authorize`.
+
+**Request Example:**  
+```plaintext
+GET /api/social/linkedin/authorize?code=AUTHORIZATION_CODE
+```
+
+**Response Example:**  
+```json
+{
+    "sub": "782bbtaQ",
+    "name": "John Doe",
+    "given_name": "John",
+    "family_name": "Doe",
+    "picture": "https://media.licdn-ei.com/dms/image/C5F03AQHqK8v7tB1HCQ/profile-displayphoto-shrink_100_100/0/",
+    "locale": "en-US",
+    "email": "doe@email.com",
+    "email_verified": true
+}
+```
+
+---
+
+Let me know if you'd like to further adjust this or need any additional details!
+
+---
+
+#### **2. Twitter API: Fetch Public Profile by Username**
+
+**Endpoint:**  
+`GET /api/social/twitter/:username/:userEmail`
+
+**Description:**  
+Fetches public profile data from Twitter for a given username and email and saves it in the database.
+
+**Steps to Use:**  
+1. **Create a Twitter Developer Account:**  
+   - Go to the [Twitter Developer Portal](https://developer.twitter.com/) and create a new app.  
+   - Note down your `API_KEY` and `API_SECRET_KEY`.  
+
+2. **Set Up Environment Variables:**  
+   Add the following variables to your `.env` file:  
+   ```plaintext
+   TWITTER_API_KEY=your_twitter_api_key
+   TWITTER_API_SECRET_KEY=your_twitter_api_secret_key
+   TWITTER_BEARER_TOKEN=your_twitter_bearer_token
+   ```
+
+3. **Generate Bearer Token:**  
+   - Use the Twitter Developer Portal to generate a Bearer Token. This is required for making API calls.  
+
+**Request Example:**  
+```plaintext
+GET /api/social/twitter/johndoe/user@example.com
+```
+
+**Response Example:**  
+```json
+{
+  "email": "user@example.com",
+  "twitterProfile": {
+    "username": "johndoe",
+    "bio": "Building awesome web applications.",
+    "location": "San Francisco, CA",
+    "followersCount": 1500,
+    "followingCount": 200
+  },
+  "message": "Twitter profile data saved successfully."
+}
+```
+
+---
+
+#### **3. Disable Social Media Integration**
+
+**Endpoint:**  
+`POST /api/social/disable`
+
+**Description:**  
+Disables social media integration for a user and deletes saved LinkedIn and Twitter data.
+
+**Request Example:**  
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response Example:**  
+```json
+{
+  "message": "Social media integration disabled, and data deleted successfully."
+}
+```
+
+---
+
+### Key Notes
+
+- **Error Handling:**  
+  Both endpoints handle missing or incomplete profile data gracefully and return descriptive error messages.  
+  Example:  
+  ```json
+  {
+    "error": "Twitter profile not found for the given username."
+  }
+  ```
+
+- **Database Integration:**  
+  Fetched data is stored in the `SocialMediaSchema` with fields for email, LinkedIn profile, Twitter profile, and `updatedAt`.
+
+- **Testing:**  
+  Use mock email addresses and usernames to test the API endpoints. Ensure the `.env` file is properly configured for LinkedIn and Twitter API access.
+
+---
+
+Would you like sample code for any of these routes?
+
