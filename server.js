@@ -16,6 +16,7 @@ const http = require('http');
 const {initializeSocket} = require('./services/socketService');
 const hubspotRoutes = require('./routes/hubspotRoutes');
 const unsubscribeRoutes = require('./routes/UnsubsribeRoutes');
+const crmRoutes = require('./routes/crmIntegrationRoutes.js');
 
 // Load environment variables
 dotenv.config();
@@ -60,6 +61,7 @@ app.use('/api/auth/test', testRoutes);  // Logical grouping for RBAC testing
 app.use('/api/analytics', trackingRoute); // Route for email tracking
 app.use("/api/ctr",CtrRoute);
 app.use("/api/unsubscribe", unsubscribeRoutes);
+app.use("/api/crm", crmRoutes);
 
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 app.use('/oauth', hubspotRoutes); // For hubspot integration
