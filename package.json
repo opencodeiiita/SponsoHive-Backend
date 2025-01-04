@@ -36,9 +36,11 @@
     "nodemailer": "^6.9.16",
     "papaparse": "^5.4.1",
     "qs": "^6.13.1",
+    "querystring": "^0.2.1",
     "sanitize-html": "^2.13.1",
     "simple-parser": "^0.0.0",
     "socket.io": "^4.8.1",
+    "twitter-v2": "^1.1.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
