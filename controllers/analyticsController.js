@@ -26,4 +26,16 @@ const getAnalytics = async (req, res) => {
     }
 };
 
-module.exports = { updateResponseRate , getAnalytics };
+const getBounceComplaintRate = async (req,res) => {
+    const campaignId = req.params.campaignId;
+    try {
+        const analyticsData = await analytics.findOne({ campaignId });
+        return res.json({emailsSent: analyticsData.emailsSent,
+            bounceCount: analyticsData.bounceCount,
+            complaintCount: analyticsData.complaintCount});
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+module.exports = { updateResponseRate , getAnalytics , getBounceComplaintRate};
