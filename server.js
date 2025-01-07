@@ -19,6 +19,7 @@ const unsubscribeRoutes = require('./routes/UnsubsribeRoutes');
 
 const crmRoutes = require('./routes/crmIntegrationRoutes.js');
 const socialMediaRoutes = require('./routes/socialMediaRoutes');
+const verificationRoutes = require('./routes/senderVerification.js');
 
 // Load environment variables
 dotenv.config();
@@ -55,7 +56,7 @@ app.get("/api/health", async (req, res) => {
 });
 
 // Use routes
-// app.use("/user", authRoute);
+app.use("/user", authRoute);
 app.use("/api/template", templateRoute);
 app.use('/api/campaigns', campaignRoutes);
 app.use("/api/email-lists", emailListRoute);
@@ -68,6 +69,7 @@ app.use("/api/crm", crmRoutes);
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 app.use('/oauth', hubspotRoutes); // For hubspot integration
 app.use("/api/social",socialMediaRoutes);
+app.use("/api/verify",verificationRoutes); // For sender email verification
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {
