@@ -1,6 +1,7 @@
 const dotenv = require('dotenv');
 const Twitter = require('twitter-v2');
 const SocialMedia = require('../models/socialMedia');
+const Integration = require('../models/integration');
 
 dotenv.config();
 const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN;
@@ -39,6 +40,8 @@ const fetchTwitterUserData = async (req, res) => {
                 { new: true, upsert: true } // `new: true` returns the updated document; `upsert: true` creates a new one if not found
             );
 
+            updateIntegration(userEmail, response.data);
+
             return res.status(200).json({
                 message: 'User Twitter data updated successfully',
                 user: updatedUser.twitter,
@@ -60,6 +63,31 @@ const extractCompanyFromBio = (bio) => {
         return matchedCompany || null;
     }
     return null;
+};
+
+const updateIntegration = async(userEmail,response) => {
+
+    console.log("twitter");
+
+    await Integration.updateOne({userEmail:userEmail},
+        {
+            $set: {
+            userEmail: userEmail,
+            integrationName: 'Twitter',
+            type:'data',
+            lastSync: new Date(),
+            data: {
+                username: response.username,
+                name: response.name,
+                bio: response.description || '',
+                location: response.location || '',
+                profileURL: `https://x.com/${response.username}`,
+            }
+        }
+    },{
+        upsert: true,
+    })
+
 };
 
 
