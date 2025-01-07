@@ -2,6 +2,10 @@ const EmailTracking = require("../models/emailTracking.js");
 const EmailReply = require("../models/emailReply.js");
 const {updateResponseRate} = require("./analyticsController.js")
 const {notifyCampaignOwner} = require("../services/socketService.js")
+const Recipient = require("../models/Recipient.js");
+const Analytics = require("../models/Analytics.js");
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.EMAIL_API_KEY);
 
 //This will generate a unique tracking url and save it to the database. This url will be embedded in the email and 
 // will be used to track the email open events
@@ -101,7 +105,87 @@ const handleEmailReplies = async (req, res) => {
         return res.status(500).send('Internal server error.');
     }
   };
-  
 
 
-module.exports = { handleGenerateTrackingURL , handleEmailTracking ,handleEmailReplies};
+const handleEventWebhook = async (req, res) => {
+    
+    const {email, event, message_id } = req.body[0];
+    console.log(email, event, message_id);
+
+    const campaign = await EmailReply.findOne({messageId: message_id});
+    const recipient = await Recipient.findOne({email: email});
+
+    if(!campaign || !recipient){
+        return res.status(400).send('Campaign not found.');
+    }
+    const campaignId = campaign.campaignId;
+
+    if(!email || !event || !message_id){
+        return res.status(400).send('incomplete data');
+    }
+
+    try {
+
+        const analytics = await Analytics.findOne({campaignId: campaignId});
+        if(!analytics){
+            await Analytics.create({campaignId: campaignId});
+        }
+
+        if(event === 'bounce'){
+            recipient.bounceCount += 1;
+            recipient.save();
+
+            analytics.bounceCount += 1;
+            analytics.save();
+        }
+
+        if(event === 'complaint'){
+            recipient.complaintCount += 1;
+            recipient.save();
+
+            analytics.complaintCount += 1;
+            analytics.save();
+        }
+
+        const bounceRate = (analytics.bounceCount / analytics.emailsSent) * 100;
+        const complaintRate = (analytics.complaintCount / analytics.emailsSent) * 100;
+
+        if(bounceRate > 5 || complaintRate > 5){
+
+            await sgMail.send({
+                to: 'rajbir7528@gmail.com',
+                from: 'rbir3438@gmail.com', // replace with your domain email address
+                subject: "Emails Bounced or Complaints Received",
+                text: `The bounce and complaint rate for your campaign has exceeded acceptable limits. Current bounce rate is ${bounceRate}%, and current complaint rate is ${complaintRate}%. Consider taking actions to improve.`
+            });
+
+        }
+
+        return res.status(200).send('Email Bounce or compaint processed successfully');
+
+  }
+  catch (error) {
+        console.error(error);
+        res.status(500).send('Internal server error');
+    }
+
+};
+
+const deactivateInvalidContacts = async () => {
+
+    const recipients = await Recipient.find({
+        $or : [
+            {bounceCount : {$gte : 2}},
+            {complaintCount : {$gte : 1}}
+        ]
+    });
+
+    recipients.foreach(async recipients => {
+        recipients.isActive = false;
+        recipients.save();
+    })
+
+}
+
+
+module.exports = { handleGenerateTrackingURL , handleEmailTracking ,handleEmailReplies , handleEventWebhook , deactivateInvalidContacts};
