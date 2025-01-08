@@ -42,4 +42,24 @@ const notifyCampaignOwner = (campaignId, message) => {
   }
 };
 
-module.exports = { initializeSocket, notifyCampaignOwner };
+const notifyUserOfExpiringToken = async(campaignId, message) => {
+  const socketId = campaignOwners[campaignId];
+  if (socketId) {
+    io.to(socketId).emit('tokenExpirationNotification', message);
+    console.log(`Notification sent to user ${campaignId}: ${message}`);
+  } else {
+    console.log(`No active connection for user ${campaignId}`);
+  }
+};
+
+const notifyUserOfFailedSync = async(campaignId, message) => {
+  const socketId = campaignOwners[campaignId];
+  if (socketId) {
+    io.to(socketId).emit('tokenExpirationNotification', message);
+    console.log(`Notification sent to user ${campaignId}: ${message}`);
+  } else {
+    console.log(`No active connection for user ${campaignId}`);
+  }
+};
+
+module.exports = { initializeSocket, notifyCampaignOwner , notifyUserOfExpiringToken , notifyUserOfFailedSync};
