@@ -1,13 +1,26 @@
 const Campaign = require('../models/Campaign');
 const { scheduleCampaign } = require('../utils/schedulerService');
 const Recipient = require("../models/Recipient"); 
+const User = require("../models/User");
 
 /**
  * Schedule a new campaign.
  */
 exports.scheduleCampaign = async (req, res) => {
   try {
-    const { name, emailListId, schedule } = req.body;
+    const { name, emailListId, schedule ,userId} = req.body; // userId of person scheduling the campaign
+
+    if(!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    if(user.verified === false) {
+      return res.status(403).json({ message: 'Account not verified. Please check your email.' });
+    }
 
     // Validate inputs
     if (!name || !emailListId || !schedule) {

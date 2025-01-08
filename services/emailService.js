@@ -4,6 +4,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.EMAIL_API_KEY);
 const EmailReply = require("../models/emailReply.js");
 const Recipient = require("../models/Recipient.js");
+const User = require("../models/User.js");
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -31,10 +32,20 @@ const sendFollowUpEmail = async (email, campaign) => {
 
 // send mail using sendgrid
 
-const sendEmail = async (recipientId, campaignId, subject) => {
+const sendEmail = async (recipientId, senderId , subject) => {
 
   const emailReply = await EmailReply.create({recipientId , campaignId , messageId:"efbhcdj"}); // add unique message id for each email
   const recipient = await Recipient.create({firstName:"abc" , email:recipientId}); // recipient name
+
+
+  const user = await User.findOne({email:senderId});
+  if (!user) {
+    return res.status(404).json({ error: 'Sender not found' });
+  }
+
+  if(user.verified === false) {
+    return res.status(403).json({ error: 'Account not verified. Please check your email.' });
+  }
 
   try {
     await sgMail.send({
@@ -46,10 +57,18 @@ const sendEmail = async (recipientId, campaignId, subject) => {
                 }
             }
         ],
-        from: campaignId,
+        from: senderId,
         subject: 'Email from SponsoHive',
         text: 'This is a test email to check if emails are being sent correctly.', // Use `text` instead of `body`
-        html: '<p>This is a test email to check if emails are being sent correctly.</p>' // Optionally add HTML content
+        html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+            <p>
+                <strong>Verified:</strong>
+                <span style="color: green; font-size: 16px;">✔️</span>
+            </p>
+            <p>This is a test email to check if emails are being sent correctly.</p>
+        </div>
+    `  // Optionally add HTML content
     });
 
     res.status(200).send('Email sent successfully.');
@@ -59,4 +78,4 @@ const sendEmail = async (recipientId, campaignId, subject) => {
 }
 };
 
-module.exports = { sendFollowUpEmail };
+module.exports = { sendFollowUpEmail , sendEmail };
