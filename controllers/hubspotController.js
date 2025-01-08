@@ -2,6 +2,7 @@ require('dotenv').config();
 const axios = require('axios');
 const qs = require('qs');
 const HubspotToken = require('../models/hubspotToken');
+const Integration = require("../models/integration");
 
 const CLIENT_ID = process.env.HUBSPOT_CLIENT_ID;
 const CLIENT_SECRET = process.env.HUBSPOT_CLIENT_SECRET;
@@ -61,6 +62,21 @@ const getAccessToken = async (req, res) => {
             refresh_token: tokenResponse.data.refresh_token,
             expires_in: new Date(Date.now() + tokenResponse.data.expires_in * 1000),
         });
+
+        await Integration.updateOne({userEmail:userId}, {
+            $set : {
+                userId:userId,
+                integrationName:"HubSpot",
+                type:"oauth",
+                lastSync: new Date(),
+                token: {
+                    accessToken: tokenResponse.data.access_token,
+                    refreshToken: tokenResponse.data.refresh_token,
+                    tokenExpiry: new Date(Date.now() + tokenResponse.data.expires_in * 1000),
+                },
+        }
+    },{upsert:true});
+
         console.log(tokenResponse.data);
         res.send('Authentication successful! Tokens stored.');
     } catch (error) {

@@ -4,6 +4,7 @@ const SocialMedia = require('../models/socialMedia');
 const querystring = require('querystring');
 const dotenv = require('dotenv');
 dotenv.config();
+const Integration = require('../models/integration');
 
 const CLIENT_ID = process.env.LINKEDIN_CLIENT_ID;
 const CLIENT_SECRET = process.env.LINKEDIN_CLIENT_SECRET;
@@ -82,6 +83,8 @@ const handleLinkedinCallback = async (req, res) => {
             { new: true, upsert: true } // If not found, create new
         );
 
+        updateIntegration(email,profileResponse);
+
         res.json({
             message: 'Social media account saved successfully!',
             socialMediaAccount,
@@ -91,6 +94,24 @@ const handleLinkedinCallback = async (req, res) => {
         console.error('Error during LinkedIn OAuth flow:', error);
         res.status(500).send('Internal server error');
     }
+};
+
+const updateIntegration = async(userId,profileResponse) => {
+
+    await Integration.updateOne({
+        userEmail: userId,
+        integrationName: 'linkedin',
+        type:'data',
+        lastSync: new Date(),
+        data: {
+            name: profileResponse.data.name,
+            email_verified: profileResponse.data.email_verified,
+            picture: profileResponse.data.picture
+        }
+    },{
+        upsert: true,
+    })
+
 };
 
 

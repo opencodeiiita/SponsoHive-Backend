@@ -2,6 +2,7 @@ const axios = require('axios');
 const qs = require('qs');
 const dotenv = require('dotenv');
 const { generateCodeVerifier, generateCodeChallenge } = require('../utils/crmHelper.js');
+const { notifyUserOfFailedSync } = require('../services/socketService.js')
 
 dotenv.config();
 
@@ -124,6 +125,11 @@ const syncCampaignResults = async (req, res) => {
   } 
   catch (error) {
     console.error('Error syncing campaign results:', error);
+
+    const campaignId = req.body;
+    const message = `Sync Failed for salesforce CRM integration.`;
+    await notifyUserOfFailedSync(campaignId,message);
+
     res.status(500).send('Failed to sync campaign results to Salesforce.');
   }
 };

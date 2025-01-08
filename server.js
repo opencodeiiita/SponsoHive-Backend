@@ -19,6 +19,7 @@ const unsubscribeRoutes = require('./routes/UnsubsribeRoutes');
 
 const crmRoutes = require('./routes/crmIntegrationRoutes.js');
 const socialMediaRoutes = require('./routes/socialMediaRoutes');
+const integrationRoutes = require('./routes/integration');
 
 // Load environment variables
 dotenv.config();
@@ -68,6 +69,7 @@ app.use("/api/crm", crmRoutes);
 app.use('/api/upload', uploadRoutes); //For testing upload middleware
 app.use('/oauth', hubspotRoutes); // For hubspot integration
 app.use("/api/social",socialMediaRoutes);
+app.use("/api/integration",integrationRoutes);
 
 // Catch-all for undefined routes
 app.use((req, res, next) => {
